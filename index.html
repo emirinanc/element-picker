@@ -1,719 +1,516 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seasonal Element Picker - React</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body>
+</head>
+<body>
     <div id="root"></div>
 
     <script type="text/babel">
-      const { useState, useEffect } = React;
+        const { useState, useEffect } = React;
 
-      // Icons as emoji (since we can't use Lucide in CDN version easily)
-      const icons = {
-        Calendar: "📅",
-        Flame: "🔥",
-        Droplets: "💧",
-        Wind: "💨",
-        Mountain: "🏔️",
-        Sun: "☀️",
-        Moon: "🌙",
-        Star: "⭐",
-        Snowflake: "❄️",
-        Leaf: "🍂",
-        Flower2: "🌸",
-      };
-
-      const SeasonalElementPicker = () => {
-        const [selectedDate, setSelectedDate] = useState(
-          new Date().toISOString().split("T")[0]
-        );
-        const [currentElement, setCurrentElement] = useState(null);
-        const [dayInfo, setDayInfo] = useState(null);
-        const [showSettings, setShowSettings] = useState(false);
-
-        // User-adjustable probability weights
-        const [planetaryWeight, setPlanetaryWeight] = useState(40);
-        const [seasonalWeight, setSeasonalWeight] = useState(30);
-        const [zodiacWeight, setZodiacWeight] = useState(30);
-
-        const elements = [
-          {
-            name: "Fire",
-            icon: icons.Flame,
-            color: "from-red-500 to-orange-500",
-            bgColor: "bg-red-50",
-            textColor: "text-red-700",
-            description: "Energy, passion, transformation, and action",
-          },
-          {
-            name: "Water",
-            icon: icons.Droplets,
-            color: "from-blue-500 to-cyan-500",
-            bgColor: "bg-blue-50",
-            textColor: "text-blue-700",
-            description: "Flow, intuition, healing, and emotional depth",
-          },
-          {
-            name: "Air",
-            icon: icons.Wind,
-            color: "from-gray-400 to-blue-300",
-            bgColor: "bg-gray-50",
-            textColor: "text-gray-700",
-            description: "Ideas, communication, freedom, and clarity",
-          },
-          {
-            name: "Earth",
-            icon: icons.Mountain,
-            color: "from-green-600 to-brown-500",
-            bgColor: "bg-green-50",
-            textColor: "text-green-700",
-            description: "Stability, growth, grounding, and nurturing",
-          },
-        ];
-
-        const planetaryDays = [
-          {
-            day: "Sunday",
-            planet: "Sun",
-            element: "Fire",
-            icon: icons.Sun,
-            influence: "Leadership, vitality, self-expression",
-          },
-          {
-            day: "Monday",
-            planet: "Moon",
-            element: "Water",
-            icon: icons.Moon,
-            influence: "Emotions, intuition, reflection",
-          },
-          {
-            day: "Tuesday",
-            planet: "Mars",
-            element: "Fire",
-            icon: icons.Star,
-            influence: "Action, courage, determination",
-          },
-          {
-            day: "Wednesday",
-            planet: "Mercury",
-            element: "Air",
-            icon: icons.Star,
-            influence: "Communication, learning, adaptability",
-          },
-          {
-            day: "Thursday",
-            planet: "Jupiter",
-            element: "Fire",
-            icon: icons.Star,
-            influence: "Expansion, wisdom, abundance",
-          },
-          {
-            day: "Friday",
-            planet: "Venus",
-            element: "Earth",
-            icon: icons.Star,
-            influence: "Love, beauty, harmony",
-          },
-          {
-            day: "Saturday",
-            planet: "Saturn",
-            element: "Earth",
-            icon: icons.Star,
-            influence: "Structure, discipline, responsibility",
-          },
-        ];
-
-        const seasonalInfluences = {
-          spring: {
-            element: "Air",
-            icon: icons.Flower2,
-            description: "Renewal, growth, fresh beginnings",
-            months: [3, 4, 5],
-          },
-          summer: {
-            element: "Fire",
-            icon: icons.Sun,
-            description: "Peak energy, manifestation, abundance",
-            months: [6, 7, 8],
-          },
-          autumn: {
-            element: "Earth",
-            icon: icons.Leaf,
-            description: "Harvest, reflection, preparation",
-            months: [9, 10, 11],
-          },
-          winter: {
-            element: "Water",
-            icon: icons.Snowflake,
-            description: "Introspection, deep wisdom, renewal",
-            months: [12, 1, 2],
-          },
+        // Icons as emoji (since we can't use Lucide in CDN version easily)
+        const icons = {
+            Calendar: '📅',
+            Flame: '🔥',
+            Droplets: '💧',
+            Wind: '💨',
+            Mountain: '🏔️',
+            Sun: '☀️',
+            Moon: '🌙',
+            Star: '⭐',
+            Snowflake: '❄️',
+            Leaf: '🍂',
+            Flower2: '🌸'
         };
 
-        const getZodiacSign = (month, day) => {
-          if ((month === 3 && day >= 21) || (month === 4 && day <= 19))
-            return {
-              sign: "Aries",
-              element: "Fire",
-              theme: "Initiative and courage",
+        const SeasonalElementPicker = () => {
+            const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+            const [currentElement, setCurrentElement] = useState(null);
+            const [dayInfo, setDayInfo] = useState(null);
+            const [showSettings, setShowSettings] = useState(false);
+            
+            // User-adjustable probability weights
+            const [planetaryWeight, setPlanetaryWeight] = useState(40);
+            const [seasonalWeight, setSeasonalWeight] = useState(30);
+            const [zodiacWeight, setZodiacWeight] = useState(30);
+
+            const elements = [
+                { 
+                    name: 'Fire', 
+                    icon: icons.Flame, 
+                    color: 'from-red-500 to-orange-500',
+                    bgColor: 'bg-red-50',
+                    textColor: 'text-red-700',
+                    description: 'Energy, passion, transformation, and action'
+                },
+                { 
+                    name: 'Water', 
+                    icon: icons.Droplets, 
+                    color: 'from-blue-500 to-cyan-500',
+                    bgColor: 'bg-blue-50',
+                    textColor: 'text-blue-700',
+                    description: 'Flow, intuition, healing, and emotional depth'
+                },
+                { 
+                    name: 'Air', 
+                    icon: icons.Wind, 
+                    color: 'from-gray-400 to-blue-300',
+                    bgColor: 'bg-gray-50',
+                    textColor: 'text-gray-700',
+                    description: 'Ideas, communication, freedom, and clarity'
+                },
+                { 
+                    name: 'Earth', 
+                    icon: icons.Mountain, 
+                    color: 'from-green-600 to-brown-500',
+                    bgColor: 'bg-green-50',
+                    textColor: 'text-green-700',
+                    description: 'Stability, growth, grounding, and nurturing'
+                }
+            ];
+
+            const planetaryDays = [
+                { day: 'Sunday', planet: 'Sun', element: 'Fire', icon: icons.Sun, influence: 'Leadership, vitality, self-expression' },
+                { day: 'Monday', planet: 'Moon', element: 'Water', icon: icons.Moon, influence: 'Emotions, intuition, reflection' },
+                { day: 'Tuesday', planet: 'Mars', element: 'Fire', icon: icons.Star, influence: 'Action, courage, determination' },
+                { day: 'Wednesday', planet: 'Mercury', element: 'Air', icon: icons.Star, influence: 'Communication, learning, adaptability' },
+                { day: 'Thursday', planet: 'Jupiter', element: 'Fire', icon: icons.Star, influence: 'Expansion, wisdom, abundance' },
+                { day: 'Friday', planet: 'Venus', element: 'Earth', icon: icons.Star, influence: 'Love, beauty, harmony' },
+                { day: 'Saturday', planet: 'Saturn', element: 'Earth', icon: icons.Star, influence: 'Structure, discipline, responsibility' }
+            ];
+
+            const seasonalInfluences = {
+                spring: { 
+                    element: 'Air', 
+                    icon: icons.Flower2, 
+                    description: 'Renewal, growth, fresh beginnings',
+                    months: [3, 4, 5]
+                },
+                summer: { 
+                    element: 'Fire', 
+                    icon: icons.Sun, 
+                    description: 'Peak energy, manifestation, abundance',
+                    months: [6, 7, 8]
+                },
+                autumn: { 
+                    element: 'Earth', 
+                    icon: icons.Leaf, 
+                    description: 'Harvest, reflection, preparation',
+                    months: [9, 10, 11]
+                },
+                winter: { 
+                    element: 'Water', 
+                    icon: icons.Snowflake, 
+                    description: 'Introspection, deep wisdom, renewal',
+                    months: [12, 1, 2]
+                }
             };
-          if ((month === 4 && day >= 20) || (month === 5 && day <= 20))
-            return {
-              sign: "Taurus",
-              element: "Earth",
-              theme: "Stability and sensuality",
+
+            const getZodiacSign = (month, day) => {
+                if ((month === 3 && day >= 21) || (month === 4 && day <= 19)) return { sign: 'Aries', element: 'Fire', theme: 'Initiative and courage' };
+                if ((month === 4 && day >= 20) || (month === 5 && day <= 20)) return { sign: 'Taurus', element: 'Earth', theme: 'Stability and sensuality' };
+                if ((month === 5 && day >= 21) || (month === 6 && day <= 20)) return { sign: 'Gemini', element: 'Air', theme: 'Communication and curiosity' };
+                if ((month === 6 && day >= 21) || (month === 7 && day <= 22)) return { sign: 'Cancer', element: 'Water', theme: 'Nurturing and emotion' };
+                if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) return { sign: 'Leo', element: 'Fire', theme: 'Creative expression and leadership' };
+                if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) return { sign: 'Virgo', element: 'Earth', theme: 'Analysis and refinement' };
+                if ((month === 9 && day >= 23) || (month === 10 && day <= 22)) return { sign: 'Libra', element: 'Air', theme: 'Balance and relationships' };
+                if ((month === 10 && day >= 23) || (month === 11 && day <= 21)) return { sign: 'Scorpio', element: 'Water', theme: 'Transformation and depth' };
+                if ((month === 11 && day >= 22) || (month === 12 && day <= 21)) return { sign: 'Sagittarius', element: 'Fire', theme: 'Adventure and philosophy' };
+                if ((month === 12 && day >= 22) || (month === 1 && day <= 19)) return { sign: 'Capricorn', element: 'Earth', theme: 'Structure and ambition' };
+                if ((month === 1 && day >= 20) || (month === 2 && day <= 18)) return { sign: 'Aquarius', element: 'Air', theme: 'Innovation and vision' };
+                if ((month === 2 && day >= 19) || (month === 3 && day <= 20)) return { sign: 'Pisces', element: 'Water', theme: 'Dreams and intuition' };
             };
-          if ((month === 5 && day >= 21) || (month === 6 && day <= 20))
-            return {
-              sign: "Gemini",
-              element: "Air",
-              theme: "Communication and curiosity",
+
+            const getAdjacentElements = (element) => {
+                const relationships = {
+                    'Fire': ['Air', 'Earth'],
+                    'Air': ['Fire', 'Water'],
+                    'Water': ['Air', 'Earth'],
+                    'Earth': ['Water', 'Fire']
+                };
+                return relationships[element] || [];
             };
-          if ((month === 6 && day >= 21) || (month === 7 && day <= 22))
-            return {
-              sign: "Cancer",
-              element: "Water",
-              theme: "Nurturing and emotion",
+
+            const getOpposingElement = (element) => {
+                const opposites = {
+                    'Fire': 'Water',
+                    'Water': 'Fire', 
+                    'Air': 'Earth',
+                    'Earth': 'Air'
+                };
+                return opposites[element];
             };
-          if ((month === 7 && day >= 23) || (month === 8 && day <= 22))
-            return {
-              sign: "Leo",
-              element: "Fire",
-              theme: "Creative expression and leadership",
+
+            const getAdjacentDescription = (element) => {
+                const descriptions = {
+                    'Fire': 'Share warmth with Air, dryness with Earth',
+                    'Air': 'Share warmth with Fire, moisture with Water',
+                    'Water': 'Share moisture with Air, coolness with Earth', 
+                    'Earth': 'Share coolness with Water, dryness with Fire'
+                };
+                return descriptions[element];
             };
-          if ((month === 8 && day >= 23) || (month === 9 && day <= 22))
-            return {
-              sign: "Virgo",
-              element: "Earth",
-              theme: "Analysis and refinement",
+
+            const getOpposingDescription = (element) => {
+                const descriptions = {
+                    'Fire': 'Water balances with cooling, flowing energy',
+                    'Water': 'Fire balances with warming, active energy',
+                    'Air': 'Earth balances with grounding, stabilizing energy',
+                    'Earth': 'Air balances with lightening, inspiring energy'
+                };
+                return descriptions[element];
             };
-          if ((month === 9 && day >= 23) || (month === 10 && day <= 22))
-            return {
-              sign: "Libra",
-              element: "Air",
-              theme: "Balance and relationships",
+
+            const getSeason = (month) => {
+                if ([3, 4, 5].includes(month)) return 'spring';
+                if ([6, 7, 8].includes(month)) return 'summer';
+                if ([9, 10, 11].includes(month)) return 'autumn';
+                return 'winter';
             };
-          if ((month === 10 && day >= 23) || (month === 11 && day <= 21))
-            return {
-              sign: "Scorpio",
-              element: "Water",
-              theme: "Transformation and depth",
+
+            const getElementForDate = (dateString) => {
+                const date = new Date(dateString);
+                const dayOfWeek = date.getDay();
+                const month = date.getMonth() + 1;
+                const dayOfMonth = date.getDate();
+                const season = getSeason(month);
+                
+                const planetaryDay = planetaryDays[dayOfWeek];
+                const seasonalInfo = seasonalInfluences[season];
+                const monthlyInfo = getZodiacSign(month, dayOfMonth);
+                
+                // Use user-adjusted weights, normalized to 100%
+                const totalWeight = planetaryWeight + seasonalWeight + zodiacWeight;
+                const normalizedPlanetary = planetaryWeight / totalWeight;
+                const normalizedSeasonal = seasonalWeight / totalWeight;
+                const normalizedZodiac = zodiacWeight / totalWeight;
+                
+                // Create a weighted decision based on date hash + current weights
+                let hash = 0;
+                const hashString = dateString + planetaryWeight + seasonalWeight + zodiacWeight;
+                for (let i = 0; i < hashString.length; i++) {
+                    const char = hashString.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+                
+                const randomValue = Math.abs(hash) % 100 / 100;
+                
+                let chosenElement, influenceSource, influenceDetails;
+                
+                if (randomValue < normalizedPlanetary) {
+                    chosenElement = elements.find(el => el.name === planetaryDay.element);
+                    influenceSource = 'planetary';
+                    influenceDetails = planetaryDay;
+                } else if (randomValue < normalizedPlanetary + normalizedSeasonal) {
+                    chosenElement = elements.find(el => el.name === seasonalInfo.element);
+                    influenceSource = 'seasonal';
+                    influenceDetails = { ...seasonalInfo, season };
+                } else {
+                    chosenElement = elements.find(el => el.name === monthlyInfo.element);
+                    influenceSource = 'monthly';
+                    influenceDetails = monthlyInfo;
+                }
+                
+                return {
+                    element: chosenElement,
+                    source: influenceSource,
+                    planetaryDay,
+                    seasonalInfo: { ...seasonalInfo, season },
+                    monthlyInfo,
+                    influenceDetails,
+                    weights: { 
+                        planetaryStrength: normalizedPlanetary, 
+                        seasonalStrength: normalizedSeasonal, 
+                        monthlyStrength: normalizedZodiac 
+                    }
+                };
             };
-          if ((month === 11 && day >= 22) || (month === 12 && day <= 21))
-            return {
-              sign: "Sagittarius",
-              element: "Fire",
-              theme: "Adventure and philosophy",
-            };
-          if ((month === 12 && day >= 22) || (month === 1 && day <= 19))
-            return {
-              sign: "Capricorn",
-              element: "Earth",
-              theme: "Structure and ambition",
-            };
-          if ((month === 1 && day >= 20) || (month === 2 && day <= 18))
-            return {
-              sign: "Aquarius",
-              element: "Air",
-              theme: "Innovation and vision",
-            };
-          if ((month === 2 && day >= 19) || (month === 3 && day <= 20))
-            return {
-              sign: "Pisces",
-              element: "Water",
-              theme: "Dreams and intuition",
-            };
-        };
 
-        const getAdjacentElements = (element) => {
-          const relationships = {
-            Fire: ["Air", "Earth"],
-            Air: ["Fire", "Water"],
-            Water: ["Air", "Earth"],
-            Earth: ["Water", "Fire"],
-          };
-          return relationships[element] || [];
-        };
+            useEffect(() => {
+                const result = getElementForDate(selectedDate);
+                setCurrentElement(result.element);
+                setDayInfo(result);
+            }, [selectedDate, planetaryWeight, seasonalWeight, zodiacWeight]);
 
-        const getOpposingElement = (element) => {
-          const opposites = {
-            Fire: "Water",
-            Water: "Fire",
-            Air: "Earth",
-            Earth: "Air",
-          };
-          return opposites[element];
-        };
+            const today = new Date().toISOString().split('T')[0];
+            const isToday = selectedDate === today;
+            const dayName = new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long' });
+            const monthName = new Date(selectedDate).toLocaleDateString('en-US', { month: 'long' });
 
-        const getAdjacentDescription = (element) => {
-          const descriptions = {
-            Fire: "Share warmth with Air, dryness with Earth",
-            Air: "Share warmth with Fire, moisture with Water",
-            Water: "Share moisture with Air, coolness with Earth",
-            Earth: "Share coolness with Water, dryness with Fire",
-          };
-          return descriptions[element];
-        };
+            return (
+                <div className="max-w-lg mx-auto p-6 bg-white rounded-xl shadow-lg">
+                    <div className="text-center mb-6">
+                        <h1 className="text-2xl font-bold text-gray-800 mb-2">Seasonal Element Picker</h1>
+                        <p className="text-gray-600">Elements guided by seasons, signs & planetary days</p>
+                    </div>
 
-        const getOpposingDescription = (element) => {
-          const descriptions = {
-            Fire: "Water balances with cooling, flowing energy",
-            Water: "Fire balances with warming, active energy",
-            Air: "Earth balances with grounding, stabilizing energy",
-            Earth: "Air balances with lightening, inspiring energy",
-          };
-          return descriptions[element];
-        };
+                    <div className="mb-6">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Choose a date:
+                        </label>
+                        <div className="relative mb-3">
+                            <span className="absolute left-3 top-3 text-gray-400">{icons.Calendar}</span>
+                            <input
+                                type="date"
+                                value={selectedDate}
+                                onChange={(e) => setSelectedDate(e.target.value)}
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+                        <div className="text-center">
+                            <button
+                                onClick={() => setShowSettings(!showSettings)}
+                                className="px-4 py-2 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-lg font-medium border border-blue-200"
+                            >
+                                ⚙️ {showSettings ? 'Hide Settings' : 'Adjust Probabilities'}
+                            </button>
+                        </div>
+                    </div>
 
-        const getSeason = (month) => {
-          if ([3, 4, 5].includes(month)) return "spring";
-          if ([6, 7, 8].includes(month)) return "summer";
-          if ([9, 10, 11].includes(month)) return "autumn";
-          return "winter";
-        };
-
-        const getElementForDate = (dateString) => {
-          const date = new Date(dateString);
-          const dayOfWeek = date.getDay();
-          const month = date.getMonth() + 1;
-          const dayOfMonth = date.getDate();
-          const season = getSeason(month);
-
-          const planetaryDay = planetaryDays[dayOfWeek];
-          const seasonalInfo = seasonalInfluences[season];
-          const monthlyInfo = getZodiacSign(month, dayOfMonth);
-
-          // Use user-adjusted weights, normalized to 100%
-          const totalWeight = planetaryWeight + seasonalWeight + zodiacWeight;
-          const normalizedPlanetary = planetaryWeight / totalWeight;
-          const normalizedSeasonal = seasonalWeight / totalWeight;
-          const normalizedZodiac = zodiacWeight / totalWeight;
-
-          // Create a weighted decision based on date hash
-          let hash = 0;
-          for (let i = 0; i < dateString.length; i++) {
-            const char = dateString.charCodeAt(i);
-            hash = (hash << 5) - hash + char;
-            hash = hash & hash;
-          }
-
-          const randomValue = (Math.abs(hash) % 100) / 100;
-
-          let chosenElement, influenceSource, influenceDetails;
-
-          if (randomValue < normalizedPlanetary) {
-            chosenElement = elements.find(
-              (el) => el.name === planetaryDay.element
-            );
-            influenceSource = "planetary";
-            influenceDetails = planetaryDay;
-          } else if (randomValue < normalizedPlanetary + normalizedSeasonal) {
-            chosenElement = elements.find(
-              (el) => el.name === seasonalInfo.element
-            );
-            influenceSource = "seasonal";
-            influenceDetails = { ...seasonalInfo, season };
-          } else {
-            chosenElement = elements.find(
-              (el) => el.name === monthlyInfo.element
-            );
-            influenceSource = "monthly";
-            influenceDetails = monthlyInfo;
-          }
-
-          return {
-            element: chosenElement,
-            source: influenceSource,
-            planetaryDay,
-            seasonalInfo: { ...seasonalInfo, season },
-            monthlyInfo,
-            influenceDetails,
-            weights: {
-              planetaryStrength: normalizedPlanetary,
-              seasonalStrength: normalizedSeasonal,
-              monthlyStrength: normalizedZodiac,
-            },
-          };
-        };
-
-        useEffect(() => {
-          const result = getElementForDate(selectedDate);
-          setCurrentElement(result.element);
-          setDayInfo(result);
-        }, [selectedDate, planetaryWeight, seasonalWeight, zodiacWeight]);
-
-        const today = new Date().toISOString().split("T")[0];
-        const isToday = selectedDate === today;
-        const dayName = new Date(selectedDate).toLocaleDateString("en-US", {
-          weekday: "long",
-        });
-        const monthName = new Date(selectedDate).toLocaleDateString("en-US", {
-          month: "long",
-        });
-
-        return (
-          <div className="max-w-lg mx-auto p-6 bg-white rounded-xl shadow-lg">
-            <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                Seasonal Element Picker
-              </h1>
-              <p className="text-gray-600">
-                Elements guided by seasons, signs & planetary days
-              </p>
-            </div>
-
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Choose a date:
-              </label>
-              <div className="relative mb-3">
-                <span className="absolute left-3 top-3 text-gray-400">
-                  {icons.Calendar}
-                </span>
-                <input
-                  type="date"
-                  value={selectedDate}
-                  onChange={(e) => setSelectedDate(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-              <div className="text-center">
-                <button
-                  onClick={() => setShowSettings(!showSettings)}
-                  className="px-4 py-2 text-sm text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-lg font-medium border border-blue-200"
-                >
-                  ⚙️ {showSettings ? "Hide Settings" : "Adjust Probabilities"}
-                </button>
-              </div>
-            </div>
-
-            {/* Probability Settings */}
-            {showSettings && (
-              <div className="mb-6 bg-blue-50 rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                  Customize Influence Weights
-                </h3>
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">
-                      Planetary Days ({planetaryWeight}%)
-                    </label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={planetaryWeight}
-                      onChange={(e) =>
-                        setPlanetaryWeight(parseInt(e.target.value))
-                      }
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">
-                      Seasonal Cycles ({seasonalWeight}%)
-                    </label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={seasonalWeight}
-                      onChange={(e) =>
-                        setSeasonalWeight(parseInt(e.target.value))
-                      }
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-600 mb-1">
-                      Zodiac Signs ({zodiacWeight}%)
-                    </label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={zodiacWeight}
-                      onChange={(e) =>
-                        setZodiacWeight(parseInt(e.target.value))
-                      }
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                    />
-                  </div>
-                  <div className="text-xs text-gray-500 mt-2">
-                    Total: {planetaryWeight + seasonalWeight + zodiacWeight}%
-                    (automatically normalized)
-                  </div>
-                  <button
-                    onClick={() => {
-                      setPlanetaryWeight(40);
-                      setSeasonalWeight(30);
-                      setZodiacWeight(30);
-                    }}
-                    className="text-xs text-blue-600 hover:text-blue-800 underline"
-                  >
-                    Reset to Defaults
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {currentElement && dayInfo && (
-              <div
-                className={`${currentElement.bgColor} rounded-xl p-6 text-center transition-all duration-500`}
-              >
-                {/* Influence Source */}
-                <div className="mb-4">
-                  <div className="flex items-center justify-center gap-2 mb-2">
-                    {dayInfo.source === "planetary" && (
-                      <>
-                        <span className="text-lg">
-                          {dayInfo.planetaryDay.icon}
-                        </span>
-                        <span className="text-sm font-medium text-gray-700">
-                          {dayInfo.planetaryDay.planet} - {dayName}
-                        </span>
-                      </>
+                    {/* Probability Settings */}
+                    {showSettings && (
+                        <div className="mb-6 bg-blue-50 rounded-lg p-4">
+                            <h3 className="text-sm font-semibold text-gray-700 mb-3">Customize Influence Weights</h3>
+                            <div className="space-y-3">
+                                <div>
+                                    <label className="block text-xs font-medium text-gray-600 mb-1">
+                                        Planetary Days ({planetaryWeight}%)
+                                    </label>
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={planetaryWeight}
+                                        onChange={(e) => setPlanetaryWeight(parseInt(e.target.value))}
+                                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-medium text-gray-600 mb-1">
+                                        Seasonal Cycles ({seasonalWeight}%)
+                                    </label>
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={seasonalWeight}
+                                        onChange={(e) => setSeasonalWeight(parseInt(e.target.value))}
+                                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-medium text-gray-600 mb-1">
+                                        Zodiac Signs ({zodiacWeight}%)
+                                    </label>
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={zodiacWeight}
+                                        onChange={(e) => setZodiacWeight(parseInt(e.target.value))}
+                                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                                    />
+                                </div>
+                                <div className="text-xs text-gray-500 mt-2">
+                                    Total: {planetaryWeight + seasonalWeight + zodiacWeight}% (automatically normalized)
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        setPlanetaryWeight(40);
+                                        setSeasonalWeight(30);
+                                        setZodiacWeight(30);
+                                    }}
+                                    className="text-xs text-blue-600 hover:text-blue-800 underline"
+                                >
+                                    Reset to Defaults
+                                </button>
+                            </div>
+                        </div>
                     )}
-                    {dayInfo.source === "seasonal" && (
-                      <>
-                        <span className="text-lg">
-                          {dayInfo.seasonalInfo.icon}
-                        </span>
-                        <span className="text-sm font-medium text-gray-700">
-                          {dayInfo.seasonalInfo.season.charAt(0).toUpperCase() +
-                            dayInfo.seasonalInfo.season.slice(1)}{" "}
-                          Season Energy
-                        </span>
-                      </>
+
+                    {currentElement && dayInfo && (
+                        <div className={`${currentElement.bgColor} rounded-xl p-6 text-center transition-all duration-500`}>
+                            {/* Influence Source */}
+                            <div className="mb-4">
+                                <div className="flex items-center justify-center gap-2 mb-2">
+                                    {dayInfo.source === 'planetary' && (
+                                        <>
+                                            <span className="text-lg">{dayInfo.planetaryDay.icon}</span>
+                                            <span className="text-sm font-medium text-gray-700">
+                                                {dayInfo.planetaryDay.planet} - {dayName}
+                                            </span>
+                                        </>
+                                    )}
+                                    {dayInfo.source === 'seasonal' && (
+                                        <>
+                                            <span className="text-lg">{dayInfo.seasonalInfo.icon}</span>
+                                            <span className="text-sm font-medium text-gray-700">
+                                                {dayInfo.seasonalInfo.season.charAt(0).toUpperCase() + dayInfo.seasonalInfo.season.slice(1)} Season Energy
+                                            </span>
+                                        </>
+                                    )}
+                                    {dayInfo.source === 'monthly' && (
+                                        <>
+                                            <span className="text-lg">⭐</span>
+                                            <span className="text-sm font-medium text-gray-700">
+                                                {monthName} • {dayInfo.monthlyInfo.sign} Season
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
+                                <p className="text-xs text-gray-600 italic">
+                                    {dayInfo.source === 'planetary' && dayInfo.planetaryDay.influence}
+                                    {dayInfo.source === 'seasonal' && dayInfo.seasonalInfo.description}
+                                    {dayInfo.source === 'monthly' && dayInfo.monthlyInfo.theme}
+                                </p>
+                            </div>
+
+                            {/* Element Display */}
+                            <div className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br ${currentElement.color} flex items-center justify-center shadow-lg`}>
+                                <span className="text-white text-2xl">{currentElement.icon}</span>
+                            </div>
+                            
+                            <h2 className={`text-2xl font-bold ${currentElement.textColor} mb-2`}>
+                                {currentElement.name}
+                            </h2>
+                            
+                            <p className={`text-sm ${currentElement.textColor} opacity-80 mb-4`}>
+                                {currentElement.description}
+                            </p>
+
+                            <div className="text-xs text-gray-500 mb-2">
+                                {dayInfo.source === 'planetary' && `🪐 Planetary influence from ${dayInfo.planetaryDay.planet}`}
+                                {dayInfo.source === 'seasonal' && `🌿 ${dayInfo.seasonalInfo.season.charAt(0).toUpperCase() + dayInfo.seasonalInfo.season.slice(1)} seasonal energy`}
+                                {dayInfo.source === 'monthly' && `♈ ${dayInfo.monthlyInfo.sign} zodiacal influence`}
+                            </div>
+
+                            <div className="text-xs text-gray-500">
+                                {isToday ? "Today's element" : `Element for ${new Date(selectedDate).toLocaleDateString()}`}
+                            </div>
+                        </div>
                     )}
-                    {dayInfo.source === "monthly" && (
-                      <>
-                        <span className="text-lg">⭐</span>
-                        <span className="text-sm font-medium text-gray-700">
-                          {monthName} • {dayInfo.monthlyInfo.sign} Season
-                        </span>
-                      </>
+
+                    <div className="mt-6 text-center">
+                        <button
+                            onClick={() => setSelectedDate(today)}
+                            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                        >
+                            Back to Today
+                        </button>
+                    </div>
+
+                    {/* Elemental Relationships */}
+                    {currentElement && (
+                        <div className="mt-6 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg p-4">
+                            <h3 className="text-sm font-semibold text-gray-700 mb-3">Elemental Movement Space</h3>
+                            <div className="space-y-3 text-xs">
+                                {/* Adjacent Elements */}
+                                <div>
+                                    <h4 className="font-medium text-purple-700 mb-2">Adjacent Elements (Harmonious)</h4>
+                                    <div className="flex gap-2">
+                                        {getAdjacentElements(currentElement.name).map((element, index) => (
+                                            <span key={index} className={`px-3 py-1 rounded-full text-white text-xs ${
+                                                element === 'Fire' ? 'bg-red-400' :
+                                                element === 'Water' ? 'bg-blue-400' :
+                                                element === 'Air' ? 'bg-gray-400' : 'bg-green-500'
+                                            }`}>
+                                                {element}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <p className="text-gray-600 mt-1 italic">
+                                        {getAdjacentDescription(currentElement.name)}
+                                    </p>
+                                </div>
+                                
+                                {/* Opposing Element */}
+                                <div>
+                                    <h4 className="font-medium text-purple-700 mb-2">Opposing Element (Balancing)</h4>
+                                    <span className={`px-3 py-1 rounded-full text-white text-xs ${
+                                        getOpposingElement(currentElement.name) === 'Fire' ? 'bg-red-400' :
+                                        getOpposingElement(currentElement.name) === 'Water' ? 'bg-blue-400' :
+                                        getOpposingElement(currentElement.name) === 'Air' ? 'bg-gray-400' : 'bg-green-500'
+                                    }`}>
+                                        {getOpposingElement(currentElement.name)}
+                                    </span>
+                                    <p className="text-gray-600 mt-1 italic">
+                                        {getOpposingDescription(currentElement.name)}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     )}
-                  </div>
-                  <p className="text-xs text-gray-600 italic">
-                    {dayInfo.source === "planetary" &&
-                      dayInfo.planetaryDay.influence}
-                    {dayInfo.source === "seasonal" &&
-                      dayInfo.seasonalInfo.description}
-                    {dayInfo.source === "monthly" && dayInfo.monthlyInfo.theme}
-                  </p>
-                </div>
 
-                {/* Element Display */}
-                <div
-                  className={`w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br ${currentElement.color} flex items-center justify-center shadow-lg`}
-                >
-                  <span className="text-white text-2xl">
-                    {currentElement.icon}
-                  </span>
-                </div>
-
-                <h2
-                  className={`text-2xl font-bold ${currentElement.textColor} mb-2`}
-                >
-                  {currentElement.name}
-                </h2>
-
-                <p
-                  className={`text-sm ${currentElement.textColor} opacity-80 mb-4`}
-                >
-                  {currentElement.description}
-                </p>
-
-                <div className="text-xs text-gray-500 mb-2">
-                  {dayInfo.source === "planetary" &&
-                    `🪐 Planetary influence from ${dayInfo.planetaryDay.planet}`}
-                  {dayInfo.source === "seasonal" &&
-                    `🌿 ${
-                      dayInfo.seasonalInfo.season.charAt(0).toUpperCase() +
-                      dayInfo.seasonalInfo.season.slice(1)
-                    } seasonal energy`}
-                  {dayInfo.source === "monthly" &&
-                    `♈ ${dayInfo.monthlyInfo.sign} zodiacal influence`}
-                </div>
-
-                <div className="text-xs text-gray-500">
-                  {isToday
-                    ? "Today's element"
-                    : `Element for ${new Date(
-                        selectedDate
-                      ).toLocaleDateString()}`}
-                </div>
-              </div>
-            )}
-
-            <div className="mt-6 text-center">
-              <button
-                onClick={() => setSelectedDate(today)}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
-              >
-                Back to Today
-              </button>
-            </div>
-
-            {/* Elemental Relationships */}
-            {currentElement && (
-              <div className="mt-6 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-lg p-4">
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                  Elemental Movement Space
-                </h3>
-                <div className="space-y-3 text-xs">
-                  {/* Adjacent Elements */}
-                  <div>
-                    <h4 className="font-medium text-purple-700 mb-2">
-                      Adjacent Elements (Harmonious)
-                    </h4>
-                    <div className="flex gap-2">
-                      {getAdjacentElements(currentElement.name).map(
-                        (element, index) => (
-                          <span
-                            key={index}
-                            className={`px-3 py-1 rounded-full text-white text-xs ${
-                              element === "Fire"
-                                ? "bg-red-400"
-                                : element === "Water"
-                                ? "bg-blue-400"
-                                : element === "Air"
-                                ? "bg-gray-400"
-                                : "bg-green-500"
-                            }`}
-                          >
-                            {element}
-                          </span>
-                        )
-                      )}
+                    {/* Astrological Context */}
+                    <div className="mt-6 bg-gray-50 rounded-lg p-4">
+                        <h3 className="text-sm font-semibold text-gray-700 mb-3">Current Influences</h3>
+                        {dayInfo && (
+                            <div className="space-y-2 text-xs">
+                                <div className="flex justify-between">
+                                    <span>Planetary Day ({dayInfo.planetaryDay.planet} - {dayName}):</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs text-gray-500">
+                                            {Math.round(dayInfo.weights.planetaryStrength * 100)}%
+                                        </span>
+                                        <span className={`px-2 py-1 rounded text-white ${
+                                            dayInfo.planetaryDay.element === 'Fire' ? 'bg-red-500' :
+                                            dayInfo.planetaryDay.element === 'Water' ? 'bg-blue-500' :
+                                            dayInfo.planetaryDay.element === 'Air' ? 'bg-gray-500' : 'bg-green-600'
+                                        }`}>
+                                            {dayInfo.planetaryDay.element}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span>Season ({dayInfo.seasonalInfo.season}):</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs text-gray-500">
+                                            {Math.round(dayInfo.weights.seasonalStrength * 100)}%
+                                        </span>
+                                        <span className={`px-2 py-1 rounded text-white ${
+                                            dayInfo.seasonalInfo.element === 'Fire' ? 'bg-red-500' :
+                                            dayInfo.seasonalInfo.element === 'Water' ? 'bg-blue-500' :
+                                            dayInfo.seasonalInfo.element === 'Air' ? 'bg-gray-500' : 'bg-green-600'
+                                        }`}>
+                                            {dayInfo.seasonalInfo.element}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span>Zodiac ({dayInfo.monthlyInfo.sign}):</span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs text-gray-500">
+                                            {Math.round(dayInfo.weights.monthlyStrength * 100)}%
+                                        </span>
+                                        <span className={`px-2 py-1 rounded text-white ${
+                                            dayInfo.monthlyInfo.element === 'Fire' ? 'bg-red-500' :
+                                            dayInfo.monthlyInfo.element === 'Water' ? 'bg-blue-500' :
+                                            dayInfo.monthlyInfo.element === 'Air' ? 'bg-gray-500' : 'bg-green-600'
+                                        }`}>
+                                            {dayInfo.monthlyInfo.element}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </div>
-                    <p className="text-gray-600 mt-1 italic">
-                      {getAdjacentDescription(currentElement.name)}
-                    </p>
-                  </div>
 
-                  {/* Opposing Element */}
-                  <div>
-                    <h4 className="font-medium text-purple-700 mb-2">
-                      Opposing Element (Balancing)
-                    </h4>
-                    <span
-                      className={`px-3 py-1 rounded-full text-white text-xs ${
-                        getOpposingElement(currentElement.name) === "Fire"
-                          ? "bg-red-400"
-                          : getOpposingElement(currentElement.name) === "Water"
-                          ? "bg-blue-400"
-                          : getOpposingElement(currentElement.name) === "Air"
-                          ? "bg-gray-400"
-                          : "bg-green-500"
-                      }`}
-                    >
-                      {getOpposingElement(currentElement.name)}
-                    </span>
-                    <p className="text-gray-600 mt-1 italic">
-                      {getOpposingDescription(currentElement.name)}
-                    </p>
-                  </div>
+                    <div className="mt-4 text-xs text-gray-500 text-center">
+                        Influenced by planetary days, seasonal cycles & zodiacal energies ✨
+                    </div>
                 </div>
-              </div>
-            )}
+            );
+        };
 
-            {/* Astrological Context */}
-            <div className="mt-6 bg-gray-50 rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                Current Influences
-              </h3>
-              {dayInfo && (
-                <div className="space-y-2 text-xs">
-                  <div className="flex justify-between">
-                    <span>
-                      Planetary Day ({dayInfo.planetaryDay.planet} - {dayName}):
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500">
-                        {Math.round(dayInfo.weights.planetaryStrength * 100)}%
-                      </span>
-                      <span
-                        className={`px-2 py-1 rounded text-white ${
-                          dayInfo.planetaryDay.element === "Fire"
-                            ? "bg-red-500"
-                            : dayInfo.planetaryDay.element === "Water"
-                            ? "bg-blue-500"
-                            : dayInfo.planetaryDay.element === "Air"
-                            ? "bg-gray-500"
-                            : "bg-green-600"
-                        }`}
-                      >
-                        {dayInfo.planetaryDay.element}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Season ({dayInfo.seasonalInfo.season}):</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500">
-                        {Math.round(dayInfo.weights.seasonalStrength * 100)}%
-                      </span>
-                      <span
-                        className={`px-2 py-1 rounded text-white ${
-                          dayInfo.seasonalInfo.element === "Fire"
-                            ? "bg-red-500"
-                            : dayInfo.seasonalInfo.element === "Water"
-                            ? "bg-blue-500"
-                            : dayInfo.seasonalInfo.element === "Air"
-                            ? "bg-gray-500"
-                            : "bg-green-600"
-                        }`}
-                      >
-                        {dayInfo.seasonalInfo.element}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Zodiac ({dayInfo.monthlyInfo.sign}):</span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500">
-                        {Math.round(dayInfo.weights.monthlyStrength * 100)}%
-                      </span>
-                      <span
-                        className={`px-2 py-1 rounded text-white ${
-                          dayInfo.monthlyInfo.element === "Fire"
-                            ? "bg-red-500"
-                            : dayInfo.monthlyInfo.element === "Water"
-                            ? "bg-blue-500"
-                            : dayInfo.monthlyInfo.element === "Air"
-                            ? "bg-gray-500"
-                            : "bg-green-600"
-                        }`}
-                      >
-                        {dayInfo.monthlyInfo.element}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-4 text-xs text-gray-500 text-center">
-              Influenced by planetary days, seasonal cycles & zodiacal energies
-              ✨
-            </div>
-          </div>
-        );
-      };
-
-      ReactDOM.render(
-        <SeasonalElementPicker />,
-        document.getElementById("root")
-      );
+        ReactDOM.render(<SeasonalElementPicker />, document.getElementById('root'));
     </script>
-  </body>
+</body>
 </html>
